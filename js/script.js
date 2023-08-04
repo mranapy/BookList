@@ -1,5 +1,7 @@
 // Get UI Elements
 let form = document.querySelector('#book-form');
+let booklist = document.querySelector('#book-list');
+// console.log(booklist)
 
 
 
@@ -12,10 +14,9 @@ class Book{
 	}
 }
 
-// UI class
+// Display class
 class Display{
-	constructor(){}
-	addToBookList(book){
+	static addToBookList(book){
 		let list = document.querySelector('#book-list');
 		let row = document.createElement('tr');
 		row.innerHTML = `
@@ -26,12 +27,12 @@ class Display{
 		list.appendChild(row);
 		// console.log(row)
 	}
-	clearFields(){
+	static clearFields(){
 		document.querySelector('#title').value = '';
 		document.querySelector('#author').value = '';
 		document.querySelector('#isbn').value = '';
 	}
-	showAlert(message, className){
+	static showAlert(message, className){
 		let div = document.createElement('div');
 		div.className = `alert ${className}`;
 		div.appendChild(document.createTextNode(message));
@@ -41,12 +42,18 @@ class Display{
 
 		setTimeout(()=>{
 			document.querySelector('.alert').remove();
-		}, 3000);
+		}, 2000);
+	}
+	static deleteFormBook(target){
+		if (target.hasAttribute('href')){
+			target.parentElement.parentElement.remove();
+		}
+		
 	}
 }
 // Add EventListener
 form.addEventListener('submit', newBook);
-
+booklist.addEventListener('click',removeBook);
 
 
 //  Define Function
@@ -54,20 +61,26 @@ function newBook(e) {
 	let title = document.querySelector('#title').value,
 	author = document.querySelector('#author').value, isbn = document.querySelector('#isbn').value;
 
-	let display = new Display();
+	// let display = new Display();
 
 	if (title ==='' || author ==='' || isbn ===''){
-		display.showAlert('Please fill all the fields!','error');
+		Display.showAlert('Please fill all the fields!','error');
 	}
 	else{
 		let book = new Book(title,author,isbn);
 		
-		display.addToBookList(book);
+		Display.addToBookList(book);
 
-		display.clearFields();
+		Display.clearFields();
 		// console.log(book);
-		display.showAlert('Book added successfully!','success');
+		Display.showAlert('Book added successfully!','success');
 		e.preventDefault();
 	}
-	
 }
+function removeBook(e) {
+		// let display = new Display();
+		Display.deleteFormBook(e.target);
+		Display.showAlert('Book Removed!', 'success');
+
+		e.preventDefault();
+	}
