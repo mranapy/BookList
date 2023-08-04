@@ -46,6 +46,7 @@ class Display{
 	}
 	static deleteFormBook(target){
 		if (target.hasAttribute('href')){
+			Display.showAlert('Book Removed!', 'success');
 			target.parentElement.parentElement.remove();
 		}
 		
@@ -80,7 +81,5 @@ function newBook(e) {
 function removeBook(e) {
 		// let display = new Display();
 		Display.deleteFormBook(e.target);
-		Display.showAlert('Book Removed!', 'success');
-
 		e.preventDefault();
 	}
